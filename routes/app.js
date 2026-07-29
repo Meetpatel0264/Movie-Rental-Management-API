@@ -9,5 +9,6 @@ app.use("/language", require("./languageRoutes/languageRoutes"));
 app.use("/category", require("./categoryRoutes/categoryRoutes"));
 app.use("/country", require("./countryRoutes/countryRoutes"));
 app.use("/city", require("./cityRoutes/cityRoutes"));
+app.use("/address", require("./addressRoutes/addressRoutes"));
 
 module.exports = app;
