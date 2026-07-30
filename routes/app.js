@@ -13,7 +13,10 @@ app.use("/address", require("./addressRoutes/addressRoutes"));
 app.use("/store", require("./storeRoutes/storeRoutes"));
 app.use("/staff", require("./staffRoutes/staffRoutes"));
 app.use("/customer", require("./customerRoutes/customerRoutes"));
-app.use("/film-actor", require("./filmRoutes/filmRoutes"));
-
+app.use("/film", require("./filmRoutes/filmRoutes"));
+app.use("/film-actor", require("./filmActorRoutes/filmActorRoutes"));
+app.use("/film-category", require("./filmCategoryRoutes/filmCategoryRoutes"));
+app.use("/inventory", require("./inventoryRoutes/inventoryRoutes"));
+app.use("/rental", require("./rentalRoutes/rentalRoutes"));
 
 module.exports = app;
