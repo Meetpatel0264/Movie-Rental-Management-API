@@ -18,7 +18,7 @@ const createActor = async (req, res) => {
             return res.status(400).json({ success: false, message: "Actor already exists" });
         }
 
-        const actor = await Actor.create({ firstname, lastName });
+        const actor = await Actor.create({ firstName, lastName });
         return res.status(201).json({ success: true, message: "Actor Created Successfully", data: actor });
     }
     catch (error) {

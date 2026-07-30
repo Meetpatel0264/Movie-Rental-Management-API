@@ -56,14 +56,7 @@ const filmSchema = new mongoose.Schema({
 
     rating: {
         type: String,
-        enum: [
-            "G",
-            "PG",
-            "PG-13",
-            "R",
-            "NC-17"
-        ],
-        default: "G"
+        default: "5"
     },
 
     specialFeatures: [{
