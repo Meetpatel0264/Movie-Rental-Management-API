@@ -7,82 +7,57 @@ const createInventory = async (req, res) => {
 
     try {
 
-        const {
+        const { filmId, storeId } = req.body;
 
-            filmId,
-            storeId
+        const checkFilm = await Film.findById(filmId);
 
-        } = req.body;
-
-        const film = await Film.findById(filmId);
-
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const store = await Store.findById(storeId);
+        const checkStore = await Store.findById(storeId);
 
-        if (!store) {
+        if (!checkStore) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
-        const inventoryExists = await Inventory.findOne({
-
+        const checkInventory = await Inventory.findOne({
             filmId,
             storeId
-
         });
 
-        if (inventoryExists) {
+        if (checkInventory) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Inventory Already Exists"
-
             });
 
         }
 
-        const inventory = await Inventory.create({
-
-            filmId,
-            storeId,
-            lastUpdate: new Date()
-
-        });
+        const inventory = await Inventory.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Inventory Created Successfully",
             data: inventory
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -90,66 +65,23 @@ const createInventory = async (req, res) => {
 };
 
 
-
 const getAllInventory = async (req, res) => {
 
     try {
 
-        const inventories = await Inventory.find()
-
-            .populate({
-
-                path: "filmId",
-
-                populate: {
-
-                    path: "languageId"
-
-                }
-
-            })
-
-            .populate({
-
-                path: "storeId",
-
-                populate: {
-
-                    path: "addressId",
-
-                    populate: {
-
-                        path: "cityId",
-
-                        populate: {
-
-                            path: "countryId"
-
-                        }
-
-                    }
-
-                }
-
-            });
+        const inventories = await Inventory.find();
 
         return res.status(200).json({
-
             success: true,
             total: inventories.length,
             data: inventories
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -161,71 +93,27 @@ const getSingleInventory = async (req, res) => {
 
     try {
 
-        const inventory = await Inventory.findById(req.params.id)
-
-            .populate({
-
-                path: "filmId",
-
-                populate: {
-
-                    path: "languageId"
-
-                }
-
-            })
-
-            .populate({
-
-                path: "storeId",
-
-                populate: {
-
-                    path: "addressId",
-
-                    populate: {
-
-                        path: "cityId",
-
-                        populate: {
-
-                            path: "countryId"
-
-                        }
-
-                    }
-
-                }
-
-            });
+        const inventory = await Inventory.findById(req.params.id);
 
         if (!inventory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Inventory Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: inventory
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -233,45 +121,35 @@ const getSingleInventory = async (req, res) => {
 };
 
 
-
 const updateInventory = async (req, res) => {
 
     try {
 
-        const {
+        const { filmId, storeId } = req.body;
 
-            filmId,
-            storeId
+        const checkFilm = await Film.findById(filmId);
 
-        } = req.body;
-
-        const film = await Film.findById(filmId);
-
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const store = await Store.findById(storeId);
+        const checkStore = await Store.findById(storeId);
 
-        if (!store) {
+        if (!checkStore) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
-        const inventoryExists = await Inventory.findOne({
+        const checkInventory = await Inventory.findOne({
 
             filmId,
             storeId,
@@ -279,108 +157,45 @@ const updateInventory = async (req, res) => {
 
         });
 
-        if (inventoryExists) {
+        if (checkInventory) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Inventory Already Exists"
-
             });
 
         }
 
-        const inventory = await Inventory.findByIdAndUpdate(
-
+        const updatedInventory = await Inventory.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                filmId,
-                storeId,
-                lastUpdate: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate({
-
-                path: "filmId",
-
-                populate: {
-
-                    path: "languageId"
-
-                }
-
-            })
-
-            .populate({
-
-                path: "storeId",
-
-                populate: {
-
-                    path: "addressId",
-
-                    populate: {
-
-                        path: "cityId",
-
-                        populate: {
-
-                            path: "countryId"
-
-                        }
-
-                    }
-
-                }
-
-            });
-
-        if (!inventory) {
+        if (!updatedInventory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Inventory Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Inventory Updated Successfully",
-            data: inventory
-
+            data: updatedInventory
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 const deleteInventory = async (req, res) => {
@@ -392,36 +207,27 @@ const deleteInventory = async (req, res) => {
         if (!inventory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Inventory Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Inventory Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 module.exports = {

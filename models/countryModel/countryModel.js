@@ -7,6 +7,11 @@ const countrySchema = new mongoose.Schema(
             required: true,
             trim: true,
             unique: true
+        },
+
+        lastUpdate: {
+            type: Date,
+            default: Date.now
         }
     });
 

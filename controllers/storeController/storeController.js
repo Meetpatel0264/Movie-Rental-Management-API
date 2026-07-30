@@ -1,17 +1,15 @@
 const Store = require("../../models/storeModel/storeModel");
 const Address = require("../../models/addressModel/addressModel");
 
-
-
 const createStore = async (req, res) => {
 
     try {
 
-        const { manager_staff_id, address_id } = req.body;
+        const { address_id } = req.body;
 
-        const address = await Address.findById(address_id);
+        const checkAddress = await Address.findById(address_id);
 
-        if (!address) {
+        if (!checkAddress) {
 
             return res.status(404).json({
                 success: false,
@@ -20,253 +18,126 @@ const createStore = async (req, res) => {
 
         }
 
-        const store = await Store.create({
-
-            manager_staff_id,
-            address_id,
-            last_update: new Date()
-
-        });
+        const store = await Store.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Store Created Successfully",
             data: store
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
-
-
 
 const getAllStore = async (req, res) => {
 
     try {
 
-        const stores = await Store.find()
-
-            .populate("manager_staff_id")
-
-            .populate({
-
-                path: "address_id",
-
-                populate: {
-
-                    path: "city_id",
-
-                    populate: {
-
-                        path: "country_id"
-
-                    }
-
-                }
-
-            });
+        const stores = await Store.find();
 
         return res.status(200).json({
-
             success: true,
             total: stores.length,
             data: stores
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
-
-
-
 
 const getSingleStore = async (req, res) => {
 
     try {
 
-        const store = await Store.findById(req.params.id)
-
-            .populate("manager_staff_id")
-
-            .populate({
-
-                path: "address_id",
-
-                populate: {
-
-                    path: "city_id",
-
-                    populate: {
-
-                        path: "country_id"
-
-                    }
-
-                }
-
-            });
+        const store = await Store.findById(req.params.id);
 
         if (!store) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: store
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
-
-
-
 
 const updateStore = async (req, res) => {
 
     try {
 
-        const { manager_staff_id, address_id } = req.body;
+        const { address_id } = req.body;
 
-        const address = await Address.findById(address_id);
+        const checkAddress = await Address.findById(address_id);
 
-        if (!address) {
+        if (!checkAddress) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Address Not Found"
-
             });
 
         }
 
-        const store = await Store.findByIdAndUpdate(
-
+        const updatedStore = await Store.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                manager_staff_id,
-                address_id,
-                last_update: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate("manager_staff_id")
-
-            .populate({
-
-                path: "address_id",
-
-                populate: {
-
-                    path: "city_id",
-
-                    populate: {
-
-                        path: "country_id"
-
-                    }
-
-                }
-
-            });
-
-        if (!store) {
+        if (!updatedStore) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Store Updated Successfully",
-            data: store
-
+            data: updatedStore
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
-
-
-
 
 const deleteStore = async (req, res) => {
 
@@ -277,35 +148,28 @@ const deleteStore = async (req, res) => {
         if (!store) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Store Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
+
 
 module.exports = {
 

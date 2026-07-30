@@ -72,22 +72,9 @@ const getSingleActor = async (req, res) => {
 const updateActor = async (req, res) => {
 
     try {
-
         const { firstName, lastName } = req.body;
-
-        const actor = await Actor.findByIdAndUpdate(
-
-            req.params.id,
-
-            {
-                firstName,
-                lastName
-            },
-            {
-                new: true,
-                runValidators: true
-            }
-
+        const actor = await Actor.findByIdAndUpdate(req.params.id,
+            { firstName, lastName }, { new: true, runValidators: true }
         );
 
         if (!actor) {
@@ -113,16 +100,12 @@ const updateActor = async (req, res) => {
 const deleteActor = async (req, res) => {
 
     try {
-
         const actor = await Actor.findByIdAndDelete(req.params.id);
-
         if (!actor) {
-
             return res.status(404).json({
                 success: false,
                 message: "Actor Not Found"
             });
-
         }
 
         return res.status(200).json({
@@ -131,7 +114,6 @@ const deleteActor = async (req, res) => {
         });
 
     } catch (error) {
-
         return res.status(500).json({
             success: false,
             message: error.message

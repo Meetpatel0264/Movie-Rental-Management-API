@@ -8,307 +8,186 @@ const createRental = async (req, res) => {
 
     try {
 
-        const {
+        const { inventoryId, customerId, staffId } = req.body;
 
-            rentalDate,
-            inventoryId,
-            customerId,
-            returnDate,
-            staffId
+        const checkInventory = await Inventory.findById(inventoryId);
 
-        } = req.body;
-
-        const inventory = await Inventory.findById(inventoryId);
-
-        if (!inventory) {
+        if (!checkInventory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Inventory Not Found"
-
             });
 
         }
 
-        const customer = await Customer.findById(customerId);
+        const checkCustomer = await Customer.findById(customerId);
 
-        if (!customer) {
+        if (!checkCustomer) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Customer Not Found"
-
             });
 
         }
 
-        const staff = await Staff.findById(staffId);
+        const checkStaff = await Staff.findById(staffId);
 
-        if (!staff) {
+        if (!checkStaff) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Staff Not Found"
-
             });
 
         }
 
-        const rental = await Rental.create({
-
-            rentalDate,
-            inventoryId,
-            customerId,
-            returnDate,
-            staffId,
-            lastUpdate: new Date()
-
-        });
+        const rental = await Rental.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Rental Created Successfully",
             data: rental
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 const getAllRental = async (req, res) => {
 
     try {
 
-        const rentals = await Rental.find()
-
-            .populate({
-                path: "inventoryId",
-                populate: {
-                    path: "filmId"
-                }
-            })
-
-            .populate("customerId")
-
-            .populate("staffId");
+        const rentals = await Rental.find();
 
         return res.status(200).json({
-
             success: true,
             total: rentals.length,
             data: rentals
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 const getSingleRental = async (req, res) => {
 
     try {
 
-        const rental = await Rental.findById(req.params.id)
-
-            .populate({
-                path: "inventoryId",
-                populate: {
-                    path: "filmId"
-                }
-            })
-
-            .populate("customerId")
-
-            .populate("staffId");
+        const rental = await Rental.findById(req.params.id);
 
         if (!rental) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Rental Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: rental
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 const updateRental = async (req, res) => {
 
     try {
 
-        const {
+        const { inventoryId, customerId, staffId } = req.body;
 
-            rentalDate,
-            inventoryId,
-            customerId,
-            returnDate,
-            staffId
+        const checkInventory = await Inventory.findById(inventoryId);
 
-        } = req.body;
-
-        const inventory = await Inventory.findById(inventoryId);
-
-        if (!inventory) {
+        if (!checkInventory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Inventory Not Found"
-
             });
 
         }
 
-        const customer = await Customer.findById(customerId);
+        const checkCustomer = await Customer.findById(customerId);
 
-        if (!customer) {
+        if (!checkCustomer) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Customer Not Found"
-
             });
 
         }
 
-        const staff = await Staff.findById(staffId);
+        const checkStaff = await Staff.findById(staffId);
 
-        if (!staff) {
+        if (!checkStaff) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Staff Not Found"
-
             });
 
         }
 
-        const rental = await Rental.findByIdAndUpdate(
-
+        const updatedRental = await Rental.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                rentalDate,
-                inventoryId,
-                customerId,
-                returnDate,
-                staffId,
-                lastUpdate: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate({
-                path: "inventoryId",
-                populate: {
-                    path: "filmId"
-                }
-            })
-
-            .populate("customerId")
-
-            .populate("staffId");
-
-        if (!rental) {
+        if (!updatedRental) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Rental Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Rental Updated Successfully",
-            data: rental
-
+            data: updatedRental
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 
 const deleteRental = async (req, res) => {
@@ -320,30 +199,22 @@ const deleteRental = async (req, res) => {
         if (!rental) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Rental Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Rental Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }

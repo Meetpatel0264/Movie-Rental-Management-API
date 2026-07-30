@@ -73,11 +73,7 @@ const getAllCity = async (req, res) => {
 
     try {
 
-        const city = await City.find()
-
-            .populate("country_id", "country")
-
-            .sort({ createdAt: -1 });
+        const city = await City.find();
 
         return res.status(200).json({
 
@@ -104,9 +100,7 @@ const getSingleCity = async (req, res) => {
 
     try {
 
-        const city = await City.findById(req.params.id)
-
-            .populate("country_id", "country");
+        const city = await City.findById(req.params.id);
 
         if (!city) {
 
@@ -143,7 +137,7 @@ const updateCity = async (req, res) => {
 
     try {
 
-        const { city, country_id } = req.body;
+        const { country_id } = req.body;
 
         const checkCountry = await Country.findById(country_id);
 
@@ -158,23 +152,15 @@ const updateCity = async (req, res) => {
 
         }
 
-        const updateCity = await City.findByIdAndUpdate(
+        const updatedCity = await City.findByIdAndUpdate(
 
             req.params.id,
 
-            {
-                city,
-                country_id
-            },
+            req.body
 
-            {
-                new: true,
-                runValidators: true
-            }
+        );
 
-        ).populate("country_id", "country");
-
-        if (!updateCity) {
+        if (!updatedCity) {
 
             return res.status(404).json({
 
@@ -189,11 +175,13 @@ const updateCity = async (req, res) => {
 
             success: true,
             message: "City Updated Successfully",
-            data: updateCity
+            data: updatedCity
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 

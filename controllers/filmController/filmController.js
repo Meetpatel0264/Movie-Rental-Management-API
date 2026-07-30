@@ -1,127 +1,74 @@
 const Film = require("../../models/filmModel/filmModel");
 const Language = require("../../models/languageModel/languageModel");
 
-
 const createFilm = async (req, res) => {
 
     try {
 
-        const {
+        const { languageId, originalLanguageId } = req.body;
 
-            title,
-            description,
-            releaseYear,
-            languageId,
-            originalLanguageId,
-            rentalDuration,
-            rentalRate,
-            length,
-            replacementCost,
-            rating,
-            specialFeatures
+        const checkLanguage = await Language.findById(languageId);
 
-        } = req.body;
-
-        const language = await Language.findById(languageId);
-
-        if (!language) {
+        if (!checkLanguage) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Language Not Found"
-
             });
 
         }
 
         if (originalLanguageId) {
 
-            const originalLanguage = await Language.findById(originalLanguageId);
+            const checkOriginalLanguage = await Language.findById(originalLanguageId);
 
-            if (!originalLanguage) {
+            if (!checkOriginalLanguage) {
 
                 return res.status(404).json({
-
                     success: false,
                     message: "Original Language Not Found"
-
                 });
 
             }
 
         }
 
-        const film = await Film.create({
-
-            title,
-            description,
-            releaseYear,
-            languageId,
-            originalLanguageId,
-            rentalDuration,
-            rentalRate,
-            length,
-            replacementCost,
-            rating,
-            specialFeatures,
-            lastUpdate: new Date()
-
-        });
+        const film = await Film.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Film Created Successfully",
             data: film
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
-
-
 const getAllFilm = async (req, res) => {
 
     try {
 
-        const films = await Film.find()
-
-            .populate("languageId")
-
-            .populate("originalLanguageId");
+        const films = await Film.find();
 
         return res.status(200).json({
-
             success: true,
             total: films.length,
             data: films
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -132,164 +79,95 @@ const getSingleFilm = async (req, res) => {
 
     try {
 
-        const film = await Film.findById(req.params.id)
-
-            .populate("languageId")
-
-            .populate("originalLanguageId");
+        const film = await Film.findById(req.params.id);
 
         if (!film) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: film
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
 const updateFilm = async (req, res) => {
 
     try {
 
-        const {
+        const { languageId, originalLanguageId } = req.body;
 
-            title,
-            description,
-            releaseYear,
-            languageId,
-            originalLanguageId,
-            rentalDuration,
-            rentalRate,
-            length,
-            replacementCost,
-            rating,
-            specialFeatures
+        const checkLanguage = await Language.findById(languageId);
 
-        } = req.body;
-
-        const language = await Language.findById(languageId);
-
-        if (!language) {
+        if (!checkLanguage) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Language Not Found"
-
             });
 
         }
 
         if (originalLanguageId) {
 
-            const originalLanguage = await Language.findById(originalLanguageId);
+            const checkOriginalLanguage = await Language.findById(originalLanguageId);
 
-            if (!originalLanguage) {
+            if (!checkOriginalLanguage) {
 
                 return res.status(404).json({
-
                     success: false,
                     message: "Original Language Not Found"
-
                 });
 
             }
 
         }
 
-        const film = await Film.findByIdAndUpdate(
-
+        const updatedFilm = await Film.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                title,
-                description,
-                releaseYear,
-                languageId,
-                originalLanguageId,
-                rentalDuration,
-                rentalRate,
-                length,
-                replacementCost,
-                rating,
-                specialFeatures,
-                lastUpdate: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate("languageId")
-
-            .populate("originalLanguageId");
-
-        if (!film) {
+        if (!updatedFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Updated Successfully",
-            data: film
-
+            data: updatedFilm
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 const deleteFilm = async (req, res) => {
 
@@ -300,30 +178,22 @@ const deleteFilm = async (req, res) => {
         if (!film) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }

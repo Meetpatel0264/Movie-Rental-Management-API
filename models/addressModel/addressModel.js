@@ -36,6 +36,11 @@ const addressSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true
+        },
+
+        lastUpdate: {
+            type: Date,
+            default: Date.now
         }
     }
 );

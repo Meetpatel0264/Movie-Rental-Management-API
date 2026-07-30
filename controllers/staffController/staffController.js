@@ -7,104 +7,65 @@ const createStaff = async (req, res) => {
 
     try {
 
-        const {
+        const { address_id, store_id, email, username } = req.body;
 
-            firstName,
-            lastName,
-            address_id,
-            email,
-            store_id,
-            active,
-            username,
-            password,
-            picture
+        const checkAddress = await Address.findById(address_id);
 
-        } = req.body;
-
-        const address = await Address.findById(address_id);
-
-        if (!address) {
+        if (!checkAddress) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Address Not Found"
-
             });
 
         }
 
-        const store = await Store.findById(store_id);
+        const checkStore = await Store.findById(store_id);
 
-        if (!store) {
+        if (!checkStore) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Store Not Found"
-
             });
 
         }
 
-        const emailExists = await Staff.findOne({ email });
+        const checkEmail = await Staff.findOne({ email });
 
-        if (emailExists) {
+        if (checkEmail) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Email Already Exists"
-
             });
 
         }
 
-        const usernameExists = await Staff.findOne({ username });
+        const checkUsername = await Staff.findOne({ username });
 
-        if (usernameExists) {
+        if (checkUsername) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Username Already Exists"
-
             });
 
         }
 
-        const staff = await Staff.create({
-
-            firstName,
-            lastName,
-            address_id,
-            email,
-            store_id,
-            active,
-            username,
-            password,
-            picture,
-            last_update: new Date()
-
-        });
+        const staff = await Staff.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Staff Created Successfully",
             data: staff
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -116,82 +77,31 @@ const getAllStaff = async (req, res) => {
 
     try {
 
-        const staff = await Staff.find()
-
-            .populate({
-                path: "address_id",
-                populate: {
-                    path: "city_id",
-                    populate: {
-                        path: "country_id"
-                    }
-                }
-            })
-
-            .populate({
-                path: "store_id",
-                populate: {
-                    path: "address_id",
-                    populate: {
-                        path: "city_id",
-                        populate: {
-                            path: "country_id"
-                        }
-                    }
-                }
-            });
+        const staff = await Staff.find();
 
         return res.status(200).json({
-
             success: true,
             total: staff.length,
             data: staff
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
+
 const getSingleStaff = async (req, res) => {
 
     try {
 
-        const staff = await Staff.findById(req.params.id)
-
-            .populate({
-                path: "address_id",
-                populate: {
-                    path: "city_id",
-                    populate: {
-                        path: "country_id"
-                    }
-                }
-            })
-
-            .populate({
-                path: "store_id",
-                populate: {
-                    path: "address_id",
-                    populate: {
-                        path: "city_id",
-                        populate: {
-                            path: "country_id"
-                        }
-                    }
-                }
-            });
+        const staff = await Staff.findById(req.params.id);
 
         if (!staff) {
 
@@ -207,9 +117,7 @@ const getSingleStaff = async (req, res) => {
             data: staff
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
             success: false,
@@ -225,23 +133,11 @@ const updateStaff = async (req, res) => {
 
     try {
 
-        const {
+        const { address_id, store_id, email, username } = req.body;
 
-            firstName,
-            lastName,
-            address_id,
-            email,
-            store_id,
-            active,
-            username,
-            password,
-            picture
+        const checkAddress = await Address.findById(address_id);
 
-        } = req.body;
-
-        const address = await Address.findById(address_id);
-
-        if (!address) {
+        if (!checkAddress) {
 
             return res.status(404).json({
                 success: false,
@@ -250,9 +146,9 @@ const updateStaff = async (req, res) => {
 
         }
 
-        const store = await Store.findById(store_id);
+        const checkStore = await Store.findById(store_id);
 
-        if (!store) {
+        if (!checkStore) {
 
             return res.status(404).json({
                 success: false,
@@ -261,12 +157,14 @@ const updateStaff = async (req, res) => {
 
         }
 
-        const emailExists = await Staff.findOne({
+        const checkEmail = await Staff.findOne({
+
             email,
             _id: { $ne: req.params.id }
+
         });
 
-        if (emailExists) {
+        if (checkEmail) {
 
             return res.status(400).json({
                 success: false,
@@ -275,12 +173,14 @@ const updateStaff = async (req, res) => {
 
         }
 
-        const usernameExists = await Staff.findOne({
+        const checkUsername = await Staff.findOne({
+
             username,
             _id: { $ne: req.params.id }
+
         });
 
-        if (usernameExists) {
+        if (checkUsername) {
 
             return res.status(400).json({
                 success: false,
@@ -289,57 +189,12 @@ const updateStaff = async (req, res) => {
 
         }
 
-        const staff = await Staff.findByIdAndUpdate(
-
+        const updatedStaff = await Staff.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                firstName,
-                lastName,
-                address_id,
-                email,
-                store_id,
-                active,
-                username,
-                password,
-                picture,
-                last_update: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-            .populate({
-                path: "address_id",
-                populate: {
-                    path: "city_id",
-                    populate: {
-                        path: "country_id"
-                    }
-                }
-            })
-
-            .populate({
-                path: "store_id",
-                populate: {
-                    path: "address_id",
-                    populate: {
-                        path: "city_id",
-                        populate: {
-                            path: "country_id"
-                        }
-                    }
-                }
-            });
-
-        if (!staff) {
+        if (!updatedStaff) {
 
             return res.status(404).json({
                 success: false,
@@ -351,12 +206,10 @@ const updateStaff = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Staff Updated Successfully",
-            data: staff
+            data: updatedStaff
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
             success: false,
@@ -388,9 +241,7 @@ const deleteStaff = async (req, res) => {
             message: "Staff Deleted Successfully"
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
             success: false,

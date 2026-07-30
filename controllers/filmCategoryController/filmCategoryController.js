@@ -3,171 +3,117 @@ const Film = require("../../models/filmModel/filmModel");
 const Category = require("../../models/categoryModel/categoryModel");
 
 
-// ==================== Create Film Category ====================
-
 const createFilmCategory = async (req, res) => {
 
     try {
 
-        const {
+        const { filmId, categoryId } = req.body;
 
-            filmId,
-            categoryId
+        const checkFilm = await Film.findById(filmId);
 
-        } = req.body;
-
-        const film = await Film.findById(filmId);
-
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const category = await Category.findById(categoryId);
+        const checkCategory = await Category.findById(categoryId);
 
-        if (!category) {
+        if (!checkCategory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Category Not Found"
-
             });
 
         }
 
-        const filmCategoryExists = await FilmCategory.findOne({
-
+        const checkFilmCategory = await FilmCategory.findOne({
             filmId,
             categoryId
-
         });
 
-        if (filmCategoryExists) {
+        if (checkFilmCategory) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Film Category Already Exists"
-
             });
 
         }
 
-        const filmCategory = await FilmCategory.create({
-
-            filmId,
-            categoryId,
-            lastUpdate: new Date()
-
-        });
+        const filmCategory = await FilmCategory.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Film Category Created Successfully",
             data: filmCategory
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
-
-// ==================== Get All Film Category ====================
 
 const getAllFilmCategory = async (req, res) => {
 
     try {
 
-        const filmCategories = await FilmCategory.find()
-
-            .populate("filmId")
-
-            .populate("categoryId");
+        const filmCategories = await FilmCategory.find();
 
         return res.status(200).json({
-
             success: true,
             total: filmCategories.length,
             data: filmCategories
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
-// ==================== Get Single Film Category ====================
 
 const getSingleFilmCategory = async (req, res) => {
 
     try {
 
-        const filmCategory = await FilmCategory.findById(req.params.id)
-
-            .populate("filmId")
-
-            .populate("categoryId");
+        const filmCategory = await FilmCategory.findById(req.params.id);
 
         if (!filmCategory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Category Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: filmCategory
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
@@ -175,47 +121,35 @@ const getSingleFilmCategory = async (req, res) => {
 };
 
 
-
-// ==================== Update Film Category ====================
-
 const updateFilmCategory = async (req, res) => {
 
     try {
 
-        const {
+        const { filmId, categoryId } = req.body;
 
-            filmId,
-            categoryId
+        const checkFilm = await Film.findById(filmId);
 
-        } = req.body;
-
-        const film = await Film.findById(filmId);
-
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const category = await Category.findById(categoryId);
+        const checkCategory = await Category.findById(categoryId);
 
-        if (!category) {
+        if (!checkCategory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Category Not Found"
-
             });
 
         }
 
-        const filmCategoryExists = await FilmCategory.findOne({
+        const checkFilmCategory = await FilmCategory.findOne({
 
             filmId,
             categoryId,
@@ -223,79 +157,46 @@ const updateFilmCategory = async (req, res) => {
 
         });
 
-        if (filmCategoryExists) {
+        if (checkFilmCategory) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Film Category Already Exists"
-
             });
 
         }
 
-        const filmCategory = await FilmCategory.findByIdAndUpdate(
-
+        const updatedFilmCategory = await FilmCategory.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                filmId,
-                categoryId,
-                lastUpdate: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate("filmId")
-
-            .populate("categoryId");
-
-        if (!filmCategory) {
+        if (!updatedFilmCategory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Category Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Category Updated Successfully",
-            data: filmCategory
-
+            data: updatedFilmCategory
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
-
-// ==================== Delete Film Category ====================
 
 const deleteFilmCategory = async (req, res) => {
 
@@ -306,39 +207,28 @@ const deleteFilmCategory = async (req, res) => {
         if (!filmCategory) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Category Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Category Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
 
-
-
-// ==================== Exports ====================
 
 module.exports = {
 

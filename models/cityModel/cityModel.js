@@ -12,6 +12,11 @@ const citySchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Country",
             required: true
+        },
+
+        lastUpdate: {
+            type: Date,
+            default: Date.now
         }
 
     });

@@ -7,6 +7,11 @@ const categorySchema = new mongoose.Schema(
             required: true,
             unique: true,
             trim: true
+        },
+
+        lastUpdate: {
+            type: Date,
+            default: Date.now
         }
     });
 

@@ -2,166 +2,120 @@ const FilmActor = require("../../models/filmActorModel/filmActorModel");
 const Actor = require("../../models/actorModel/actorModel");
 const Film = require("../../models/filmModel/filmModel");
 
-
 const createFilmActor = async (req, res) => {
 
     try {
 
         const { actorId, filmId } = req.body;
 
-        const actor = await Actor.findById(actorId);
+        const checkActor = await Actor.findById(actorId);
 
-        if (!actor) {
+        if (!checkActor) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Actor Not Found"
-
             });
 
         }
 
-        const film = await Film.findById(filmId);
+        const checkFilm = await Film.findById(filmId);
 
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const filmActorExists = await FilmActor.findOne({
-
+        const checkFilmActor = await FilmActor.findOne({
             actorId,
             filmId
-
         });
 
-        if (filmActorExists) {
+        if (checkFilmActor) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Film Actor Already Exists"
-
             });
 
         }
 
-        const filmActor = await FilmActor.create({
-
-            actorId,
-            filmId,
-            lastUpdate: new Date()
-
-        });
+        const filmActor = await FilmActor.create(req.body);
 
         return res.status(201).json({
-
             success: true,
             message: "Film Actor Created Successfully",
             data: filmActor
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 const getAllFilmActor = async (req, res) => {
 
     try {
 
-        const filmActors = await FilmActor.find()
-
-            .populate("actorId")
-
-            .populate("filmId");
+        const filmActors = await FilmActor.find();
 
         return res.status(200).json({
-
             success: true,
             total: filmActors.length,
             data: filmActors
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 const getSingleFilmActor = async (req, res) => {
 
     try {
 
-        const filmActor = await FilmActor.findById(req.params.id)
-
-            .populate("actorId")
-
-            .populate("filmId");
+        const filmActor = await FilmActor.findById(req.params.id);
 
         if (!filmActor) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Actor Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             data: filmActor
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 const updateFilmActor = async (req, res) => {
 
@@ -169,33 +123,29 @@ const updateFilmActor = async (req, res) => {
 
         const { actorId, filmId } = req.body;
 
-        const actor = await Actor.findById(actorId);
+        const checkActor = await Actor.findById(actorId);
 
-        if (!actor) {
+        if (!checkActor) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Actor Not Found"
-
             });
 
         }
 
-        const film = await Film.findById(filmId);
+        const checkFilm = await Film.findById(filmId);
 
-        if (!film) {
+        if (!checkFilm) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Not Found"
-
             });
 
         }
 
-        const filmActorExists = await FilmActor.findOne({
+        const checkFilmActor = await FilmActor.findOne({
 
             actorId,
             filmId,
@@ -203,76 +153,45 @@ const updateFilmActor = async (req, res) => {
 
         });
 
-        if (filmActorExists) {
+        if (checkFilmActor) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Film Actor Already Exists"
-
             });
 
         }
 
-        const filmActor = await FilmActor.findByIdAndUpdate(
-
+        const updatedFilmActor = await FilmActor.findByIdAndUpdate(
             req.params.id,
+            req.body
+        );
 
-            {
-
-                actorId,
-                filmId,
-                lastUpdate: new Date()
-
-            },
-
-            {
-
-                new: true,
-                runValidators: true
-
-            }
-
-        )
-
-            .populate("actorId")
-
-            .populate("filmId");
-
-        if (!filmActor) {
+        if (!updatedFilmActor) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Actor Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Actor Updated Successfully",
-            data: filmActor
-
+            data: updatedFilmActor
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
 
 };
-
 
 const deleteFilmActor = async (req, res) => {
 
@@ -283,30 +202,22 @@ const deleteFilmActor = async (req, res) => {
         if (!filmActor) {
 
             return res.status(404).json({
-
                 success: false,
                 message: "Film Actor Not Found"
-
             });
 
         }
 
         return res.status(200).json({
-
             success: true,
             message: "Film Actor Deleted Successfully"
-
         });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         return res.status(500).json({
-
             success: false,
             message: error.message
-
         });
 
     }
