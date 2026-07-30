@@ -1,7 +1,5 @@
 const Language = require("../../models/languageModel/languageModel");
 
-// Create Language
-
 const createLanguage = async (req, res) => {
 
     try {
@@ -47,8 +45,6 @@ const createLanguage = async (req, res) => {
 
 };
 
-// Get All Language
-
 const getAllLanguage = async (req, res) => {
 
     try {
@@ -71,8 +67,6 @@ const getAllLanguage = async (req, res) => {
     }
 
 };
-
-// Get Single Language
 
 const getSingleLanguage = async (req, res) => {
 
@@ -104,8 +98,6 @@ const getSingleLanguage = async (req, res) => {
     }
 
 };
-
-// Update Language
 
 const updateLanguage = async (req, res) => {
 
@@ -145,8 +137,6 @@ const updateLanguage = async (req, res) => {
     }
 
 };
-
-// Delete Language
 
 const deleteLanguage = async (req, res) => {
 

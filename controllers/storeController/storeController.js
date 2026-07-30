@@ -2,26 +2,16 @@ const Store = require("../../models/storeModel/storeModel");
 const Address = require("../../models/addressModel/addressModel");
 
 
-// Create Store
 
 const createStore = async (req, res) => {
 
     try {
 
-        const { manager_staff, address_id } = req.body;
+        const { manager_staff_id, address_id } = req.body;
 
-        if (!manager_staff || !address_id) {
+        const address = await Address.findById(address_id);
 
-            return res.status(400).json({
-                success: false,
-                message: "All Fields Required"
-            });
-
-        }
-
-        const checkAddress = await Address.findById(address_id);
-
-        if (!checkAddress) {
+        if (!address) {
 
             return res.status(404).json({
                 success: false,
@@ -32,8 +22,9 @@ const createStore = async (req, res) => {
 
         const store = await Store.create({
 
-            manager_staff,
-            address_id
+            manager_staff_id,
+            address_id,
+            last_update: new Date()
 
         });
 
@@ -45,7 +36,9 @@ const createStore = async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 
@@ -60,13 +53,14 @@ const createStore = async (req, res) => {
 
 
 
-// Get All Store
 
 const getAllStore = async (req, res) => {
 
     try {
 
-        const store = await Store.find()
+        const stores = await Store.find()
+
+            .populate("manager_staff_id")
 
             .populate({
 
@@ -84,19 +78,19 @@ const getAllStore = async (req, res) => {
 
                 }
 
-            })
-
-            .sort({ createdAt: -1 });
+            });
 
         return res.status(200).json({
 
             success: true,
-            total: store.length,
-            data: store
+            total: stores.length,
+            data: stores
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 
@@ -111,13 +105,15 @@ const getAllStore = async (req, res) => {
 
 
 
-// Get Single Store
+
 
 const getSingleStore = async (req, res) => {
 
     try {
 
         const store = await Store.findById(req.params.id)
+
+            .populate("manager_staff_id")
 
             .populate({
 
@@ -155,7 +151,9 @@ const getSingleStore = async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 
@@ -170,17 +168,17 @@ const getSingleStore = async (req, res) => {
 
 
 
-// Update Store
+
 
 const updateStore = async (req, res) => {
 
     try {
 
-        const { manager_staff, address_id } = req.body;
+        const { manager_staff_id, address_id } = req.body;
 
-        const checkAddress = await Address.findById(address_id);
+        const address = await Address.findById(address_id);
 
-        if (!checkAddress) {
+        if (!address) {
 
             return res.status(404).json({
 
@@ -196,32 +194,41 @@ const updateStore = async (req, res) => {
             req.params.id,
 
             {
-                manager_staff,
-                address_id
+
+                manager_staff_id,
+                address_id,
+                last_update: new Date()
+
             },
 
             {
+
                 new: true,
                 runValidators: true
+
             }
 
-        ).populate({
+        )
 
-            path: "address_id",
+            .populate("manager_staff_id")
 
-            populate: {
+            .populate({
 
-                path: "city_id",
+                path: "address_id",
 
                 populate: {
 
-                    path: "country_id"
+                    path: "city_id",
+
+                    populate: {
+
+                        path: "country_id"
+
+                    }
 
                 }
 
-            }
-
-        });
+            });
 
         if (!store) {
 
@@ -242,7 +249,9 @@ const updateStore = async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 
@@ -257,7 +266,7 @@ const updateStore = async (req, res) => {
 
 
 
-// Delete Store
+
 
 const deleteStore = async (req, res) => {
 
@@ -283,7 +292,9 @@ const deleteStore = async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return res.status(500).json({
 

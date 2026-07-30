@@ -16,10 +16,12 @@ const actorSchema = new mongoose.Schema({
         trim: true,
         minlength: 2,
         maxlength: 50
+    },
+
+     lastUpdate: {
+        type: Date,
+        default: Date.now
     }
-},
-{
-    timestamps: true
 });
 
 module.exports = mongoose.model("Actor", actorSchema);

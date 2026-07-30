@@ -1,9 +1,6 @@
 const Address = require("../../models/addressModel/addressModel");
 const City = require("../../models/cityModel/cityModel");
 
-
-// Create Address
-
 const createAddress = async (req, res) => {
 
     try {
@@ -77,11 +74,6 @@ const createAddress = async (req, res) => {
 
 };
 
-
-
-
-// Get All Address
-
 const getAllAddress = async (req, res) => {
 
     try {
@@ -135,11 +127,6 @@ const getAllAddress = async (req, res) => {
     }
 
 };
-
-
-
-
-// Get Single Address
 
 const getSingleAddress = async (req, res) => {
 
@@ -198,11 +185,6 @@ const getSingleAddress = async (req, res) => {
     }
 
 };
-
-
-
-
-// Update Address
 
 const updateAddress = async (req, res) => {
 
@@ -289,11 +271,6 @@ const updateAddress = async (req, res) => {
     }
 
 };
-
-
-
-
-// Delete Address
 
 const deleteAddress = async (req, res) => {
 

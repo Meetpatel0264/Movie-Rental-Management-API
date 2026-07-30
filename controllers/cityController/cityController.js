@@ -1,9 +1,6 @@
 const City = require("../../models/cityModel/cityModel");
 const Country = require("../../models/countryModel/countryModel");
 
-
-// ================= Create City =================
-
 const createCity = async (req, res) => {
 
     try {
@@ -72,10 +69,6 @@ const createCity = async (req, res) => {
 
 };
 
-
-
-// ================= Get All City =================
-
 const getAllCity = async (req, res) => {
 
     try {
@@ -106,9 +99,6 @@ const getAllCity = async (req, res) => {
     }
 
 };
-
-
-// ================= Get Single City =================
 
 const getSingleCity = async (req, res) => {
 
@@ -148,9 +138,6 @@ const getSingleCity = async (req, res) => {
     }
 
 };
-
-
-// ================= Update City =================
 
 const updateCity = async (req, res) => {
 
@@ -218,9 +205,6 @@ const updateCity = async (req, res) => {
     }
 
 };
-
-
-// ================= Delete City =================
 
 const deleteCity = async (req, res) => {
 

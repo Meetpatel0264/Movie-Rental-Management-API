@@ -1,24 +1,24 @@
 const mongoose = require("mongoose");
 
-const storeSchema = new mongoose.Schema(
-    {
+const storeSchema = new mongoose.Schema({
 
-        manager_staff: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        address_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Address",
-            required: true
-        }
-
+    manager_staff_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Staff",
+        default: null
     },
-    {
-        timestamps: true
+
+    address_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+        required: true
+    },
+
+    last_update: {
+        type: Date,
+        default: Date.now
     }
-);
+
+});
 
 module.exports = mongoose.model("Store", storeSchema);

@@ -1,8 +1,5 @@
 const Country = require("../../models/countryModel/countryModel");
 
-
-// ================= Create Country =================
-
 const createCountry = async (req, res) => {
 
     try {
@@ -48,9 +45,6 @@ const createCountry = async (req, res) => {
 
 };
 
-
-// ================= Get All Country =================
-
 const getAllCountry = async (req, res) => {
 
     try {
@@ -73,9 +67,6 @@ const getAllCountry = async (req, res) => {
     }
 
 };
-
-
-// ================= Get Single Country =================
 
 const getSingleCountry = async (req, res) => {
 
@@ -107,9 +98,6 @@ const getSingleCountry = async (req, res) => {
     }
 
 };
-
-
-// ================= Update Country =================
 
 const updateCountry = async (req, res) => {
 
@@ -155,9 +143,6 @@ const updateCountry = async (req, res) => {
     }
 
 };
-
-
-// ================= Delete Country =================
 
 const deleteCountry = async (req, res) => {
 

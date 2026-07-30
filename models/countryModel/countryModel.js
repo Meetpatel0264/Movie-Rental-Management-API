@@ -8,10 +8,6 @@ const countrySchema = new mongoose.Schema(
             trim: true,
             unique: true
         }
-    },
-    {
-        timestamps: true
-    }
-);
+    });
 
 module.exports = mongoose.model("Country", countrySchema);
