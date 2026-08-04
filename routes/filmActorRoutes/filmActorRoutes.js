@@ -11,15 +11,16 @@ const {
     deleteFilmActor
 
 } = require("../../controllers/filmActorController/filmActorController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createFilmActor);
+router.post("/", authorize("admin"), createFilmActor);
 
-router.get("/", getAllFilmActor);
+router.get("/", authorize("admin", "staff"), getAllFilmActor);
 
-router.get("/:id", getSingleFilmActor);
+router.get("/:id", authorize("admin", "staff"), getSingleFilmActor);
 
-router.put("/:id", updateFilmActor);
+router.put("/:id", authorize("admin"), updateFilmActor);
 
-router.delete("/:id", deleteFilmActor);
+router.delete("/:id", authorize("admin"), deleteFilmActor);
 
 module.exports = router;

@@ -12,14 +12,16 @@ const {
 
 } = require("../../controllers/countryController/countryController");
 
-router.post("/", createCountry);
+const { protect, authorize } = require('../../Middleware/authMiddleware');
 
-router.get("/", getAllCountry);
+router.post("/", authorize("admin"), createCountry);
 
-router.get("/:id", getSingleCountry);
+router.get("/", authorize("admin", "staff"), getAllCountry);
 
-router.put("/:id", updateCountry);
+router.get("/:id", authorize("admin", "staff"), getSingleCountry);
 
-router.delete("/:id", deleteCountry);
+router.put("/:id", authorize("admin"), updateCountry);
+
+router.delete("/:id", authorize("admin"), deleteCountry);
 
 module.exports = router;

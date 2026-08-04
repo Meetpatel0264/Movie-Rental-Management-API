@@ -11,15 +11,16 @@ const {
     deleteCity
 
 } = require("../../controllers/cityController/cityController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createCity);
+router.post("/", authorize("admin"), createCity);
 
-router.get("/", getAllCity);
+router.get("/", authorize("admin", "staff"), getAllCity);
 
-router.get("/:id", getSingleCity);
+router.get("/:id", authorize("admin", "staff"), getSingleCity);
 
-router.put("/:id", updateCity);
+router.put("/:id", authorize("admin"), updateCity);
 
-router.delete("/:id", deleteCity);
+router.delete("/:id", authorize("admin"), deleteCity);
 
 module.exports = router;

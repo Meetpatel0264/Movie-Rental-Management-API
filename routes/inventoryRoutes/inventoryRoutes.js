@@ -11,15 +11,16 @@ const {
     deleteInventory
 
 } = require("../../controllers/inventoryController/inventoryController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createInventory);
+router.post("/", authorize("admin"), createInventory);
 
-router.get("/", getAllInventory);
+router.get("/", authorize("admin", "staff"), getAllInventory);
 
-router.get("/:id", getSingleInventory);
+router.get("/:id", authorize("admin", "staff"), getSingleInventory);
 
-router.put("/:id", updateInventory);
+router.put("/:id", authorize("admin"), updateInventory);
 
-router.delete("/:id", deleteInventory);
+router.delete("/:id", authorize("admin"), deleteInventory);
 
 module.exports = router;

@@ -9,15 +9,16 @@ const {
     updateActor,
     deleteActor
 } = require("../../controllers/actorController/actorController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createActor);
+router.post("/", authorize("admin"), createActor);
 
-router.get("/", getAllActor);
+router.get("/", authorize("admin", "staff"), getAllActor);
 
-router.get("/:id", getSingleActor);
+router.get("/:id", authorize("admin", "staff"), getSingleActor);
 
-router.put("/:id", updateActor);
+router.put("/:id", authorize("admin"), updateActor);
 
-router.delete("/:id", deleteActor);
+router.delete("/:id", authorize("admin"), deleteActor);
 
 module.exports = router;

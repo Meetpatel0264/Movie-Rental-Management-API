@@ -11,15 +11,16 @@ const {
     deleteFilmCategory
 
 } = require("../../controllers/filmCategoryController/filmCategoryController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createFilmCategory);
+router.post("/", authorize("admin"), createFilmCategory);
 
-router.get("/", getAllFilmCategory);
+router.get("/", authorize("admin", "staff"), getAllFilmCategory);
 
-router.get("/:id", getSingleFilmCategory);
+router.get("/:id", authorize("admin", "staff"), getSingleFilmCategory);
 
-router.put("/:id", updateFilmCategory);
+router.put("/:id", authorize("admin"), updateFilmCategory);
 
-router.delete("/:id", deleteFilmCategory);
+router.delete("/:id", authorize("admin"), deleteFilmCategory);
 
 module.exports = router;

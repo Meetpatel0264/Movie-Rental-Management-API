@@ -11,15 +11,16 @@ const {
     deleteStore
 
 } = require("../../controllers/storeController/storeController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createStore);
+router.post("/", authorize("admin"), createStore);
 
-router.get("/", getAllStore);
+router.get("/", authorize("admin", "staff"), getAllStore);
 
-router.get("/:id", getSingleStore);
+router.get("/:id", authorize("admin", "staff"), getSingleStore);
 
-router.put("/:id", updateStore);
+router.put("/:id", authorize("admin"), updateStore);
 
-router.delete("/:id", deleteStore);
+router.delete("/:id", authorize("admin"), deleteStore);
 
 module.exports = router;

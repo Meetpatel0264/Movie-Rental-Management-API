@@ -11,15 +11,16 @@ const {
     deleteCustomer
 
 } = require("../../controllers/customerController/customerController");
+const { authorize } = require("../../middleware/authMiddleware");
 
-router.post("/", createCustomer);
+router.post("/", authorize("admin"), createCustomer);
 
-router.get("/", getAllCustomer);
+router.get("/", authorize("admin", "staff"), getAllCustomer);
 
-router.get("/:id", getSingleCustomer);
+router.get("/:id", authorize("admin", "staff"), getSingleCustomer);
 
-router.put("/:id", updateCustomer);
+router.put("/:id", authorize("admin"), updateCustomer);
 
-router.delete("/:id", deleteCustomer);
+router.delete("/:id", authorize("admin"), deleteCustomer);
 
 module.exports = router;
